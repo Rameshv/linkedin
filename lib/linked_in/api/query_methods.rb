@@ -53,6 +53,7 @@ module LinkedIn
           query_str += ((query_str=='') ? '' : '&') + key.to_s + '=' + val.to_s
         end
         path += '?' + query_str unless query_str == ''
+        puts path
         Mash.from_json(get(path))
       end
 
