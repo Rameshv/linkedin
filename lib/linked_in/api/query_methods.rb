@@ -38,9 +38,18 @@ module LinkedIn
         Mash.from_json(get(path))
       end
 
-      def network_query(path,options)
+      def network_query(path, options)
+
+        fields = options[:fields] || LinkedIn.default_profile_fields
+
+        if options[:public]
+          path +=":public"
+        elsif fields
+          path +=":(#{fields.map { |f| f.to_s.gsub("_", "-") }.join(',')})"
+        end
+
         query_str = ''
-        options.each do |key, val|
+        options[:filters].each do |key, val|
           query_str += ((query_str=='') ? '' : '&') + key.to_s + '=' + val.to_s
         end
         path += '?' + query_str unless query_str == ''
